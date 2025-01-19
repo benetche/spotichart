@@ -1,21 +1,16 @@
 import React from "react";
 import { auth } from "@/auth";
 import { fetchFavoriteArtist } from "../lib/spotify/requests";
+import CanvaImage from "./CanvaImage";
 
 async function DashboardComponent({ session }) {
-  // if (!session) {
-  //   redirect("/login");
-  // }
-  const accessToken = session.spotifyAccessToken;
+  console.log("SESSION:", session);
+  const accessToken = session.accessToken;
 
-  // const tracks = await fetchTracks(accessToken);
   const favArtist = await fetchFavoriteArtist(accessToken);
   return (
-    <div>
-      <h1 className="text-4xl mb-5">
-        <form></form>
-        Your favorite artist is: {favArtist[0].artistName}
-      </h1>
+    <div className="flex flex-col items-center justify-center w-full bg-green-500 text-white font-sans pt-10">
+      <CanvaImage favArtist={favArtist} />
     </div>
   );
 }

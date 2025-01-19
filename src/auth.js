@@ -4,33 +4,10 @@ import Spotify from "next-auth/providers/spotify";
 const SCOPES = [
   "user-read-private",
   "user-read-email",
-  "playlist-read-private",
-  "user-library-read",
+  // "playlist-read-private",
+  // "user-library-read",
   "user-top-read",
 ].join(" ");
-
-const fetchSpotifyAccessToken = async () => {
-  const response = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      grant_type: "client_credentials",
-      client_id: process.env.AUTH_SPOTIFY_ID,
-      client_secret: process.env.AUTH_SPOTIFY_SECRET,
-      scopes: SCOPES,
-    }),
-  });
-
-  const data = await response.json();
-  console.log("Spotify token: ", data);
-  if (!response.ok) {
-    throw new Error(`Error fetching Spotify token: ${data.error}`);
-  }
-
-  return data.access_token;
-};
 
 const getRefreshToken = async (refreshToken) => {
   const url = "https://accounts.spotify.com/api/token";
@@ -75,31 +52,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async jwt({ token, account }) {
-      // Fetch Spotify access token on initial login
       if (account) {
-        console.log("account: ", account);
-        const spotifyToken = account.access_token; // I FINALLY FOUND IT
-        token.spotifyAccessToken = spotifyToken;
-        token.spotifyRefreshToken = account.refresh_token; // Store refresh token
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+        token.accessTokenExpires = Date.now() + account.expires_in * 1000;
       }
 
-      // Refresh Spotify access token if it has expired
-      if (Date.now() > token.accessTokenExpires) {
-        const refreshedTokens = await getRefreshToken(
-          token.spotifyRefreshToken
-        );
-        token.spotifyAccessToken = refreshedTokens.accessToken;
-        token.spotifyRefreshToken = refreshedTokens.refreshToken;
+      if (Date.now() < token.accessTokenExpires) {
+        return token;
+      }
+
+      try {
+        const refreshedTokens = await getRefreshToken(account.refreshToken);
+        token.accessToken = refreshedTokens.accessToken;
+        token.refreshToken = refreshedTokens.refreshToken;
         token.accessTokenExpires =
-          Date.now() + refreshedTokens.expires_in * 1000; // Update expiry time
+          Date.now() + refreshedTokens.expires_in * 1000;
+      } catch (error) {
+        console.error("Error refreshing access token", error);
+        return {
+          ...token,
+          error: "RefreshAccessTokenError",
+        };
       }
 
       return token;
     },
     async session({ session, token }) {
-      // Add Spotify access token to the session
-      session.spotifyAccessToken = token.spotifyAccessToken;
-      session.spotifyRefreshToken = token.spotifyRefreshToken;
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
+      session.accessTokenExpires = token.accessTokenExpires;
       return session;
     },
   },

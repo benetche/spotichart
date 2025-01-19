@@ -27,7 +27,7 @@ async function fetchTracks(accessToken) {
 
 async function fetchFavoriteArtist(accessToken) {
   const response = await fetch(
-    "https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=1&offset=0",
+    "https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=1&offset=1",
     {
       headers: {
         Authorization: "Bearer " + accessToken,

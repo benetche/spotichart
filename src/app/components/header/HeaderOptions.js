@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import LogoutButton from "./LogoutButton";
+import Link from "next/link";
 
-const HeaderOptions = () => {
+const HeaderOptions = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -9,22 +11,23 @@ const HeaderOptions = () => {
   };
 
   return (
-    <nav className="bg-black p-4">
+    <nav className="bg-black p-4 fixed top-0 left-0 right-0 z-10">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-green-500 text-lg font-bold">MyWebsite</div>
-        <div className="hidden md:flex space-x-4">
-          <a href="#home" className="text-white hover:text-green-500">
+        <div className="text-green-500 text-lg font-bold"></div>
+        <div className="hidden md:flex space-x-4 items-center">
+          <Link href="#home" className="text-white hover:text-green-500">
             Home
-          </a>
-          <a href="#about" className="text-white hover:text-green-500">
+          </Link>
+          <Link href="#about" className="text-white hover:text-green-500">
             About
-          </a>
-          <a href="#privacy" className="text-white hover:text-green-500">
+          </Link>
+          <Link href="#privacy" className="text-white hover:text-green-500">
             Privacy and Policy
-          </a>
-          <a href="#contact" className="text-white hover:text-green-500">
+          </Link>
+          <Link href="#contact" className="text-white hover:text-green-500">
             Contact
-          </a>
+          </Link>
+          {session && <LogoutButton />}
         </div>
         <div className="md:hidden">
           <button
