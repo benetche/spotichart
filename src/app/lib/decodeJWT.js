@@ -2,7 +2,7 @@ import { decode } from "next-auth/jwt";
 export const dynamic = "force-dynamic";
 
 async function decodeJWT(cookieStore) {
-  const token = cookieStore.get("__Secure-authjs.session-token");
+  const token = cookieStore.get("authjs.session-token");
   const decrypted = await decode({
     token: token.value,
     salt: token.name,
