@@ -114,7 +114,7 @@ export default function CanvaImage({ favArtist, theme }) {
         </p>
         <p className="text-white text-xl mt-6">Thanks for visiting</p>
         <p className="text-white text-xl font-bold mt-2">
-          spotichart.vercel.app
+          spoti-chart.vercel.app
         </p>
         <div className="mt-4">
           <img src="/spotify-logo.png" alt="Spotify Logo" width={100} />
