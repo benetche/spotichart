@@ -1,8 +1,8 @@
 # To do list:
 
-- Customize Signout button []
-- Improve colors from header []
-- Search for a cool font []
+- Customize Signout button [x]
+- Improve colors from header [x]
+- Search for a cool font [x]
 - Header -> center vertically [X]
 
 ## Image generation
