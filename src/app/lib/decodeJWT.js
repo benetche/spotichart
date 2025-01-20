@@ -1,7 +1,7 @@
-import { cookies } from "next/headers";
 import { decode } from "next-auth/jwt";
-async function decodeJWT() {
-  const cookieStore = await cookies();
+export const dynamic = "force-dynamic";
+
+async function decodeJWT(cookieStore) {
   const token = cookieStore.get("authjs.session-token");
   const decrypted = await decode({
     token: token.value,

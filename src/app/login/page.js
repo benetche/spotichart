@@ -1,21 +1,20 @@
+"use server";
 import { auth } from "@/auth";
-import LoginButton from "./LoginButton";
+import LoginButton from "../components/LoginButton";
 import { redirect } from "next/navigation";
 
 async function Login() {
   const session = await auth();
-
   if (session) {
-    return redirect("/dashboard");
+    redirect("/");
   }
+
   return (
-    <div className="flex justify-center bg-black-500 min-h-screen">
+    <div className="flex justify-center bg-black-500 mb-20">
       <div className="text-center mt-20">
-        <h1 className="text-4xl font-bold text-white mb-4">
-          Welcome to Spotichart
-        </h1>
-        <p className="text-xl text-purple-200 mb-10 italic">
-          Discover your own preferencies!
+        <h1 className="text-4xl font-bold text-white mb-4">Spotichart</h1>
+        <p className="text-xl text-green-500 mb-10 ">
+          Your Personalized Music Journey
         </p>
         <div className="flex justify-center mt-20">
           <LoginButton />

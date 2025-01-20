@@ -76,6 +76,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           };
         } catch (error) {
           console.error("Error refreshing access_token", error);
+          if (error.message.includes("invalid_grant")) {
+            // Force re-authentication if refresh token is invalid or revoked
+            return {
+              ...token,
+              error: "RefreshTokenError",
+              accessToken: null,
+              refreshToken: null,
+            };
+          }
           token.error = "RefreshTokenError";
           return token;
         }

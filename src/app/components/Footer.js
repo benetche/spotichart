@@ -17,7 +17,7 @@ const Footer = () => {
         <nav className="footer-nav">
           <ul className="flex justify-center space-x-2">
             <li>
-              <Link href="/dashboard" legacyBehavior>
+              <Link href="/" legacyBehavior>
                 <a className="text-blue-400">Home</a>
               </Link>
             </li>
