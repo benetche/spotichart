@@ -1,11 +1,14 @@
 import DashboardComponent from "./DashboardComponent";
 import withSession from "../lib/withSession";
-import CanvaImage from "./CanvaImage";
+import decodeJWT from "../lib/decodeJWT";
+import { fetchFavoriteArtist } from "../lib/spotify/requests";
 
-async function Dashboard({ session }) {
+async function Dashboard() {
+  const accessToken = await decodeJWT();
+  const favArtist = await fetchFavoriteArtist(accessToken);
   return (
     <div>
-      <DashboardComponent session={session} />
+      <DashboardComponent favArtist={favArtist} />
     </div>
   );
 }

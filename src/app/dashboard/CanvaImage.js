@@ -4,8 +4,54 @@ import html2canvas from "html2canvas";
 
 // Next-image component doesn't work well with HTML2Canvas
 
-export default function CanvaImage({ favArtist }) {
+export default function CanvaImage({ favArtist, theme }) {
   const divRef = useRef(null);
+  const url = theme === "dark" ? "/background1.jpg" : "/background2.jpg";
+
+  const handleShare = async () => {
+    if (divRef.current) {
+      const canvas = await html2canvas(divRef.current, {
+        useCORS: true,
+      });
+
+      const croppedCanvas = document.createElement("canvas");
+      const context = croppedCanvas.getContext("2d");
+      const cropHeight = canvas.height - 5;
+      croppedCanvas.width = canvas.width;
+      croppedCanvas.height = cropHeight;
+      context.drawImage(
+        canvas,
+        0,
+        0,
+        canvas.width,
+        cropHeight,
+        0,
+        0,
+        canvas.width,
+        cropHeight
+      );
+
+      const dataUrl = croppedCanvas.toDataURL("image/png");
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Check this out!",
+            text: "I found this amazing content. Check it out!",
+            files: [
+              new File([await (await fetch(dataUrl)).blob()], "image.png", {
+                type: "image/png",
+              }),
+            ],
+          });
+        } catch (error) {
+          console.error("Error sharing:", error);
+        }
+      } else {
+        alert("Sharing is not supported in your browser.");
+      }
+    }
+  };
 
   const saveAsImage = async () => {
     if (divRef.current) {
@@ -45,7 +91,7 @@ export default function CanvaImage({ favArtist }) {
         ref={divRef}
         className="flex flex-col items-center justify-center w-full bg-gradient-to-b from-black to-purple-800 px-10 py-8 bg-cover overflow-hidden"
         style={{
-          backgroundImage: "url('/background1.jpg')",
+          backgroundImage: `url(${url})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -74,12 +120,20 @@ export default function CanvaImage({ favArtist }) {
           <img src="/spotify-logo.png" alt="Spotify Logo" width={100} />
         </div>
       </div>
-      <button
-        onClick={saveAsImage}
-        className="mt-6 px-4 py-2 bg-blue-500 text-white font-medium rounded w-full"
-      >
-        Save Image
-      </button>
+      <div className="flex justify-center mt-6 space-x-4">
+        <button
+          onClick={saveAsImage}
+          className="flex-1 px-4 py-2 bg-blue-500 text-white font-medium rounded"
+        >
+          Download Image
+        </button>
+        <button
+          onClick={handleShare}
+          className="flex-1 px-4 py-2 bg-purple-500 text-white font-medium rounded"
+        >
+          Share
+        </button>
+      </div>
     </div>
   );
 }

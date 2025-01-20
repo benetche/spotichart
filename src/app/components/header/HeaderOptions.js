@@ -15,14 +15,17 @@ const HeaderOptions = ({ session }) => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-green-500 text-lg font-bold"></div>
         <div className="hidden md:flex space-x-4 items-center">
-          <Link href="#home" className="text-white hover:text-green-500">
+          <Link href="/dashboard" className="text-white hover:text-green-500">
             Home
           </Link>
           <Link href="#about" className="text-white hover:text-green-500">
             About
           </Link>
-          <Link href="#privacy" className="text-white hover:text-green-500">
-            Privacy and Policy
+          <Link
+            href="/privacy-policy"
+            className="text-white hover:text-green-500"
+          >
+            Privacy Policy
           </Link>
           <Link href="#contact" className="text-white hover:text-green-500">
             Contact
@@ -65,6 +68,7 @@ const HeaderOptions = ({ session }) => {
           <a href="#contact" className="text-white hover:text-green-500">
             Contact
           </a>
+          {session && <LogoutButton />}
         </div>
       )}
     </nav>

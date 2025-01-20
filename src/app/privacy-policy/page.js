@@ -2,7 +2,7 @@ import React from "react";
 
 function PrivacyAndPolicy() {
   return (
-    <div className="min-h-screen bg-black-300 p-6 mt-10">
+    <div className=" bg-black-300 p-6 mt-10">
       <div className="max-w-4xl mx-auto bg-black-500 p-8 shadow-md rounded-lg">
         <h1 className="text-3xl font-bold mb-6 text-green-500">
           Privacy Policy
@@ -30,7 +30,7 @@ function PrivacyAndPolicy() {
             className="text-blue-300"
           >
             Spotify apps page
-          </a>
+          </a>{" "}
           and click &quot;REMOVE ACCESS&quot; on Spotichart.
         </p>
       </div>

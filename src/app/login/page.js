@@ -1,6 +1,13 @@
+import { auth } from "@/auth";
 import LoginButton from "./LoginButton";
+import { redirect } from "next/navigation";
 
-export default function Login() {
+async function Login() {
+  const session = await auth();
+
+  if (session) {
+    return redirect("/dashboard");
+  }
   return (
     <div className="flex justify-center bg-black-500 min-h-screen">
       <div className="text-center mt-20">
@@ -17,3 +24,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;
