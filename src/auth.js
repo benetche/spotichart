@@ -1,13 +1,9 @@
 import NextAuth from "next-auth";
 import Spotify from "next-auth/providers/spotify";
 
-const SCOPES = [
-  "user-read-private",
-  "user-read-email",
-  // "playlist-read-private",
-  // "user-library-read",
-  "user-top-read",
-].join(" ");
+const SCOPES = ["user-read-private", "user-read-email", "user-top-read"].join(
+  " "
+);
 
 const getRefreshToken = async (refreshToken) => {
   const url = "https://accounts.spotify.com/api/token";
@@ -53,35 +49,40 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
-        token.accessToken = account.access_token;
-        token.refreshToken = account.refresh_token;
-        token.accessTokenExpires = Date.now() + account.expires_in * 1000;
-      }
-
-      if (Date.now() < token.accessTokenExpires) {
-        return token;
-      }
-
-      try {
-        const refreshedTokens = await getRefreshToken(account.refreshToken);
-        token.accessToken = refreshedTokens.accessToken;
-        token.refreshToken = refreshedTokens.refreshToken;
-        token.accessTokenExpires =
-          Date.now() + refreshedTokens.expires_in * 1000;
-      } catch (error) {
-        console.error("Error refreshing access token", error);
+        // First-time login, save the `access_token`, its expiry and the `refresh_token`
         return {
           ...token,
-          error: "RefreshAccessTokenError",
+          accessToken: account.access_token,
+          accessTokenExpires: account.expires_at,
+          refreshToken: account.refresh_token,
         };
-      }
+      } else if (Date.now() < token.accessTokenExpires * 1000) {
+        // Subsequent logins, but the `access_token` is still valid
+        return token;
+      } else {
+        // Subsequent logins, but the `access_token` has expired, try to refresh it
+        if (!token.refreshToken) throw new TypeError("Missing refresh_token");
 
-      return token;
+        try {
+          const { accessToken, refreshToken } = await getRefreshToken(
+            token.refreshToken
+          );
+
+          return {
+            ...token,
+            accessToken,
+            accessTokenExpires: Math.floor(Date.now() / 1000 + 3600), // Assuming 1 hour expiry
+            refreshToken,
+          };
+        } catch (error) {
+          console.error("Error refreshing access_token", error);
+          token.error = "RefreshTokenError";
+          return token;
+        }
+      }
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-      session.accessTokenExpires = token.accessTokenExpires;
+      session.error = token.error;
       return session;
     },
   },
