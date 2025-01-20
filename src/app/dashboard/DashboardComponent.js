@@ -14,14 +14,16 @@ function DashboardComponent({ favArtist }) {
       <div className="flex flex-col md:flex-row w-full md:items-start md:justify-center">
         <CanvaImage favArtist={favArtist} theme={selectedTheme} />
         <div className="flex flex-col justify-start items-start mt-10 md:mt-0 md:ml-10">
-          <h2 className="text-xl mb-4 font-bold md:mt-20">
+          <h2 className="text-xl  font-extrabold md:mt-20">
             Customize your picture
           </h2>
-          <div className="space-x-4">
+          <hr className="border-t border-gray-300 w-full my-2" />
+          <p className="mb-2 mt-2 font-bold">Background</p>
+          <div className="ml-2 space-x-4">
             <button
               className={`px-4 py-2 rounded ${
                 selectedTheme === "dark"
-                  ? "bg-black text-white"
+                  ? "bg-green-500 text-white"
                   : "bg-transparent text-white outline"
               }`}
               onClick={() => handleThemeChange("dark")}
@@ -31,7 +33,7 @@ function DashboardComponent({ favArtist }) {
             <button
               className={`px-4 py-2 rounded ${
                 selectedTheme === "light"
-                  ? "bg-black text-white"
+                  ? "bg-green-500 text-white"
                   : "bg-transparent text-white outline"
               }`}
               onClick={() => handleThemeChange("light")}
