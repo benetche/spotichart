@@ -8,7 +8,7 @@ function PrivacyAndPolicy() {
           Privacy Policy
         </h1>
         <p className="mb-4 text-gray-300">
-          Spotichart was developed as an open-source app powered by{" "}
+          MusicalDNA was developed as an open-source app powered by{" "}
           <a className="text-blue-300" href="https://spotify.com">
             Spotify
           </a>{" "}
@@ -23,7 +23,7 @@ function PrivacyAndPolicy() {
           or share your data with any third-party services.
         </p>
         <p className="mb-4 text-gray-300">
-          You can revoke Spotichart&apos;s access to your Spotify data at any
+          You can revoke MusicalDNA&apos;s access to your Spotify data at any
           time by visiting your{" "}
           <a
             href="https://www.spotify.com/account/apps/"
@@ -31,7 +31,7 @@ function PrivacyAndPolicy() {
           >
             Spotify apps page
           </a>{" "}
-          and click &quot;REMOVE ACCESS&quot; on Spotichart.
+          and click &quot;REMOVE ACCESS&quot; on MusicalDNA.
         </p>
       </div>
     </div>
